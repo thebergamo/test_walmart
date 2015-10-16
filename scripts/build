@@ -34,7 +34,7 @@ fi;
 
 if [ ! -f ".env" ]; then
   message '   Resolve environment files' "warn"
-  cp ../.envsample ../.env
+  cp .envsample .env
 fi
 
 message 'Project Builded' "info"

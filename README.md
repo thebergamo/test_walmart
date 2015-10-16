@@ -2,7 +2,7 @@ Walmart Test
 ===
 
 ## Objective
-This test consist in create an WebService to a Walmart's client discover the best path for delivery your products. The WebService must have a way to manage an map with the routes available. The routes available have the following properties `origin`, `destination` and `cost` in KM. WebService need have a way to calculate the best path based in the following properties `origin`, `destination`, `autonomy`of the vehicle and `gas` price.  
+This test consist in create a WebService to a Walmart's client discover the best path for delivery your products. The WebService must have a way to manage an map with the routes available. The routes available have the following properties `origin`, `destination` and `cost` in KM. WebService need have a way to calculate the best path based in the following properties `origin`, `destination`, `autonomy`of the vehicle and `gas` price.  
 
 ## Tools
 - **Node.js** - A JavaScript platform.

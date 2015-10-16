@@ -187,10 +187,15 @@ To solve this problem we can fit the search in width or depth common used in the
 
 ## Run this Project
 To run this project you need have installed 
-- Node.js (latest version)
-- MongoDB 3.0.6
+- **Node.js** (latest version)
+- **MongoDB** 3.0.6
 
-And then just run
+And then just run:
 ```sh
 npm run build && npm start
+```
+
+If you want to run tests just run:
+```sh
+npm test
 ```

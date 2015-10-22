@@ -3,16 +3,16 @@
 // load deps
 let Joi = require('joi');
 
-let MapValidator = {
+let PlanValidator = {
   index: index,
   show: show,
-  route: route,
+  query: query,
   create: create,
   update: update,
   destroy: destroy
 };
 
-module.exports = MapValidator;
+module.exports = PlanValidator;
 
 function index () {
   return {};
@@ -30,7 +30,7 @@ function show () {
   };
 }
 
-function route () {
+function query () {
   return {
     params: {
       id: Joi
@@ -52,11 +52,7 @@ function route () {
         .max(30)
         .trim()
         .required(),
-      autonomy: Joi
-        .number()
-        .positive()
-        .required(),
-      gas: Joi
+      minutes: Joi
         .number()
         .positive()
         .required()
@@ -73,32 +69,25 @@ function create () {
         .max(30)
         .trim()
         .required(),
-      roads: Joi
-        .array()
+      pack: Joi
+        .object({
+          minutes: Joi
+          .number()
+          .integer()
+          .positive()
+          .required(),
+          extra: Joi
+          .number()
+          .integer()
+          .positive()
+          .required(),
+          cost: Joi
+          .number()
+          .integer()
+          .positive()
+          .required()
+        })
         .required()
-        .min(1)
-        .items(
-          Joi
-          .object({
-            origin: Joi
-              .string()
-              .min(1)
-              .max(30)
-              .trim()
-              .required(),
-            destination: Joi
-              .string()
-              .min(1)
-              .max(30)
-              .trim()
-              .required(),
-            cost: Joi
-              .number()
-              .integer()
-              .positive()
-              .required()
-          })
-        )
     }
   };
 }
@@ -119,32 +108,25 @@ function update () {
         .max(30)
         .trim()
         .optional(),
-      roads: Joi
-        .array()
+      pack: Joi
+        .object({
+          minutes: Joi
+            .number()
+            .integer()
+            .positive()
+            .required(),
+          extra: Joi
+            .number()
+            .integer()
+            .positive()
+            .required(),
+          cost: Joi
+            .number()
+            .integer()
+            .positive()
+            .required()
+        })
         .optional()
-        .min(1)
-        .items(
-          Joi
-          .object({
-            origin: Joi
-              .string()
-              .min(1)
-              .max(30)
-              .trim()
-              .required(),
-            destination: Joi
-              .string()
-              .min(1)
-              .max(30)
-              .trim()
-              .required(),
-            cost: Joi
-              .number()
-              .integer()
-              .positive()
-              .required()
-          })
-        )
     }
   };
 }

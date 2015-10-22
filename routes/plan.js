@@ -1,7 +1,7 @@
 'use strict';
 
-var Controller = require('../controllers/map');
-var Validator = require('../validators/map');
+var Controller = require('../controllers/plan');
+var Validator = require('../validators/plan');
 
 exports.register = (server, options, next) => {
   // instantiate controller
@@ -11,7 +11,7 @@ exports.register = (server, options, next) => {
   server.route([
     {
       method: 'GET',
-      path: '/maps',
+      path: '/plans',
       config: {
         handler: controller.index,
         validate: Validator.index()
@@ -19,7 +19,7 @@ exports.register = (server, options, next) => {
     },
     {
       method: 'GET',
-      path: '/map/{id}',
+      path: '/plan/{id}',
       config: {
         handler: controller.show,
         validate: Validator.show()
@@ -27,15 +27,15 @@ exports.register = (server, options, next) => {
     },
     {
       method: 'GET',
-      path: '/map/{id}/route',
+      path: '/plan/{id}/query',
       config: {
-        handler: controller.route,
-        validate: Validator.route()
+        handler: controller.query,
+        validate: Validator.query()
       }
     },
     {
       method: 'POST',
-      path: '/map',
+      path: '/plan',
       config: {
         handler: controller.create,
         validate: Validator.create()
@@ -43,7 +43,7 @@ exports.register = (server, options, next) => {
     },
     {
       method: 'PUT',
-      path: '/map/{id?}',
+      path: '/plan/{id?}',
       config: {
         handler: controller.update,
         validate: Validator.update()
@@ -51,7 +51,7 @@ exports.register = (server, options, next) => {
     },
     {
       method: 'DELETE',
-      path: '/map/{id?}',
+      path: '/plan/{id?}',
       config: {
         handler: controller.destroy,
         validate: Validator.destroy()
@@ -63,6 +63,6 @@ exports.register = (server, options, next) => {
 };
 
 exports.register.attributes = {
-  name: 'map-route',
+  name: 'plan-route',
   version: '1.0.0'
 };

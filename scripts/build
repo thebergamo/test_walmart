@@ -21,12 +21,17 @@ message(){
   fi 
 } 
 
+importMongo(){
+  node scripts/fixtures
+  message "     Database imported!" "info"
+}
+
 message 'Building project' "info"
 
 message '   Resolve dependencies' "info"
 
 if [ -d "node_modules" ]; then
-  message '       Dependencies allready downloaded' "warn"
+  message '       Dependencies already downloaded' "warn"
 else 
   npm install
   message '       Dependencies downloaded' "warn"
@@ -36,6 +41,10 @@ if [ ! -f ".env" ]; then
   message '   Resolve environment files' "warn"
   cp .envsample .env
 fi
+
+message "   Importing database" "info"
+
+importMongo
 
 message 'Project Builded' "info"
 echo '# To continue just run: npm start'

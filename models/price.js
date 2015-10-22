@@ -3,17 +3,16 @@
 let mongoose = require('mongoose');
 
 let Schema = new mongoose.Schema({
-  name: {
+  origin: {
     type: String,
     required: true
   },
-  roads: [{
-    origin: String,
+  destinations: [{
     destination: String,
     cost: Number
   }]
 });
 
-let MapModel = mongoose.model('Map', Schema);
+let PriceModel = mongoose.model('Price', Schema);
 
-module.exports = MapModel;
+module.exports = PriceModel;

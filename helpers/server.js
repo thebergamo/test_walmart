@@ -5,6 +5,8 @@ require('dotenv').load();
 
 // load deps
 let Hapi = require('hapi');
+let Path = require('path');
+let Inert = require('inert');
 
 // load database
 let db = require('./database');
@@ -22,6 +24,20 @@ server.connection({
 if (process.env.NODE_ENV === 'test') {
   server.database = db;
 }
+
+// load inert
+server.register(Inert, () => {});
+
+// static file
+server.route({
+    method: 'GET',
+    path: '/{param*}',
+    handler: {
+        directory: {
+            path: Path.join(__dirname, '..', 'public')
+        }
+    }
+});
 
 // load routes
 server.register(getRoutes(), (err) => {
@@ -44,11 +60,19 @@ module.exports = server;
  *
  */
 function getRoutes () {
-  return [{
-    register: require('../routes/map'),
-    options: {
-      database: db
+  return [
+    {
+      register: require('../routes/plan'),
+      options: {
+        database: db
+      }
+    },
+    {
+      register: require('../routes/price'),
+      options: {
+        database: db
+      }
     }
-  }];
+  ];
 }
 

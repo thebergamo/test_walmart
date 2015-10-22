@@ -1,0 +1,78 @@
+<div layout="column" layout-aling="center center" style="padding: 40px" ng-cloak="">
+
+  <div layout="column" layout-align="center center" style="height: 100px;">
+    <p>{{query.greeting}} </p>
+  </div>
+  <div layout="row" layout-sm="column" layout-md="column" layout-align="center center" style="height: 100px;">
+    <md-input-container>
+      <label>Plano</label>
+      <md-select  ng-model="query.plan" md-on-open="query.loadPlans()" style="min-width: 200px;">
+        <md-option ng-value="plan" ng-repeat="plan in query.plans">{{plan.name}}</md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container>
+      <label>Origem</label>
+      <md-select  ng-model="query.location" md-on-open="query.loadLocations()" style="min-width: 200px;">
+        <md-option ng-value="location" ng-repeat="location in query.locations">{{location.origin}}</md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container>
+      <label>Destino</label>
+      <md-select  ng-model="query.destination" ng-disabled="!query.location" md-on-open="query.loadDestinations()" style="min-width: 200px;">
+        <md-option ng-value="dest" ng-repeat="dest in query.destinations">{{dest.destination}}</md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container>
+      <label>Minutos</label>
+      <input type="text" pattern="^[+]?\d+([.]\d+)?$" ng-model="query.minutes" md-maxlength="6">
+    </md-input-container>
+  </div>
+</div>
+
+<div layout="column" layout-align="center center" style="height: 100px;">
+  <md-button ng-click="query.doQuery()" aria-label="Consultar" ng-disabled="!(query.plan && query.location && query.destination && query.minutes)" class="md-raised md-primary">
+    <ng-md-icon icon="send" style="fill: white; position: relative; top: 6px;"></ng-md-icon> Consultar
+  </md-button> 
+</div>
+
+<md-content laout="column" ng-show="query.result" flex>
+  <div class="md-actions" layout="row" layout-align="end center">
+    <md-button ng-click="query.close()">
+      <ng-md-icon icon="close" style="fill: black; position: relative; top: 6px;"></ng-md-icon>
+    </md-button>
+  </div>
+  <md-card>
+    <md-data-table-toolbar>
+      <h2 class="md-title">Consulta</h2>
+    </md-data-table-toolbar>
+
+    <md-data-table-container>
+      <table md-data-table class="md-primary" md-row-select="selected" md-progress="deferred">
+        <thead>
+          <tr>
+            <th name="Plano" style="width: 15%;"></th>
+            <th name="Origem" style="width: 5%;"></th>
+            <th name="Destino" style="width: 5%;"></th>
+            <th name="Minutos" style="width: 5%;"></th>
+            <th unit="R$" trim name="Com FaleMais" style="width: 10%;"></th>
+            <th unit="R$" trim name="Sem FaleMais" style="width: 10%;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{query.result.plan}}</td>
+            <td>{{query.result.origin}}</td>
+            <td>{{query.result.destination}}</td>
+            <td>{{query.result.minutes}}</td>
+            <td trim>{{query.result.planCost | customCurrency}}</td>
+            <td trim>{{query.result.noPlanCost | customCurrency}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </md-data-table-container>
+
+  </md-card>
+</md-content>

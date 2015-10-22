@@ -1,7 +1,7 @@
 {
-  "name": "test_walmart",
+  "name": "test_scup",
   "version": "1.0.0",
-  "description": "A simple API to handle logistic operations.",
+  "description": "A simple API to handle customers at scupTel.",
   "main": "index.js",
   "scripts": {
     "test": "scripts/test",
@@ -14,10 +14,9 @@
     "boom": "2.9.0",
     "dotenv": "1.2.0",
     "hapi": "10.4.1",
+    "inert": "^3.1.0",
     "joi": "6.9.0",
-    "mocha": "2.3.3",
-    "mongoose": "4.1.11",
-    "node-dijkstra": "2.2.0"
+    "mongoose": "4.1.11"
   },
   "devDependencies": {
     "chai": "3.3.0",

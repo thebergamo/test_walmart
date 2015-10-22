@@ -1,189 +1,282 @@
-Walmart Test
+Teste Scup
 ===
 
-## Objective
-This test consist in create an WebService to a Walmart's client discover the best path for delivery your products. The WebService must have a way to manage an map with the routes available. The routes available have the following properties `origin`, `destination` and `cost` in KM. WebService need have a way to calculate the best path based in the following properties `origin`, `destination`, `autonomy`of the vehicle and `gas` price.  
+## Objetivo
+O objetivo deste teste é ajudar a scupTel na sua missão de transparência, criar uma API onde seus clientes possam consultar os valores gastos ao utilizar os planos FaleMais. Em uma página web aberta ao público, o cliente deve escolher seu plano, a origem da ligação, o destino e a quantidade de minutos. O sistema irá mostrar os valores que esse cliente gastaria não usando os planos FaleMais e usando o FaleMais.
 
-## Tools
+## Ferramentas
 - **Node.js** - A JavaScript platform.
 - **Hapi** - Web framework
 - **MongoDB** - NoSQL Database
 - **Lab** - BDD and Code Coverage framework
 - **Chai** - Assertion library
 
-## The right tool for the right job
-Today, **Node.js** is an huge platform for web development, this is endorsed by a lot of big companies like Netflix, LinkedIn, Microsoft, Paypal, Medium, Uber and **Walmart**. The facility in development and the power of the V8 contribute for an fast product for production ready!  
-
-**Hapi** have a lot of tools and your archteture is designed to empower the developer when we need to build an API. Your community support and ecosystem envolved encourage us to use this to make great APIs.  
-
-In this case we not have a lot of relations and our data is simple, so is better keep it simple, **MongoDB** help us in this case, A NoSQL document based database is a perfect Database for this project.  
-
-All software have bugs, but we can decrease the risks writting automated tests. 
-
-When we use **Hapi**, **Lab** fits like a glove. This have inside your code some features embedded like Code Coverage, Linters and others stuffs for help us to improve our source. Finally **Chai** help us in the tests when we need do an assertion in and variable or objects received.
-
-## The API
-Our API have an unique endpoint called `map`, following the endpoint documentation.
-
-### GET /maps
-**Overview**: GET /maps will return all maps stored  
+## API
+### GET /plans
+**Overview**: GET /plans retornará todas os planos  
 **request**
 ```
-GET /maps
+GET /plans
 ```
 **output**
 ```json
 [
-  {
-    "_id": "561dc3c1e2f5436f6e6e4981",
-    "name": "SP",
-    "__v": 0,
-    "roads": [
-      {
-        "origin": "A",
-        "destination": "B",
-        "cost": 10,
-        "_id": "561dc3c1e2f5436f6e6e4982"
-      }
-    ]
-  }
+	{
+		_id: "5629678b4ef023e8292881e0",
+		name: "FaleMais 30",
+		__v: 0,
+		pack: {
+			cost: 30,
+			extra: 10,
+			minutes: 30
+		}
+	}
 ]
 ```
 
-### GET /map/{id}
-**Overview**: GET /map/{id} will return just one specified map.  
+### GET /plan/{id}
+**Overview**: GET /plan/{id} retornará o plano especificado. 
 **Parameters**:
-- **id** - Must be an MongoDB ObjectID - Id is required.
+- **id** - Precisa ser um ObjectID - Id é obrigatório.
 
 **request**  
 ```
-GET /map/561dc3c1e2f5436f6e6e4981
+GET /plan/561dc3c1e2f5436f6e6e4981
 ```
 **output**
 ```json
 {
-  "_id": "561dc3c1e2f5436f6e6e4981",
-  "name": "SP",
-  "__v": 0,
-  "roads": [
-    {
-      "origin": "A",
-      "destination": "B",
-      "cost": 10,
-      "_id": "561dc3c1e2f5436f6e6e4982"
-    }
-  ]
+	_id: "561dc3c1e2f5436f6e6e4981",
+	name: "FaleMais 30",
+	__v: 0,
+	pack: {
+		cost: 30,
+		extra: 10,
+		minutes: 30
+	}
 }
 ```
 
-### GET /map/{id}/route
-**Overview**: GET /map/{id}/route will return the best route for the parameters sended. If a route is not available or invalid parameters, an `statusCode=400` will received.  
-**Parameters**: All parameters are required.
-- **origin** - The start point in this map.
-- **destination** - The end point in this map.
-- **autonomy** - The autonomy of the vehicle in KM. (How many KM the vehicle can run with one liter of gas)
-- **gas** - The price of the gasoline
+### GET /plan/{id}/query
+**Overview**: GET /plan/{id}/query irá retornar o custo das ligações com e sem o plano FaleMais. Se algum dos parâmetros enviados for inválido, um erro `statusCode=400` será retornado, junto com o erro. **Parameters**: Todos os parâmetros são obrigatórios.
+- **origin** - Cidade/DDD de origem da ligação.
+- **destination** - Cidade/DDD de destino da ligação.
+- **minutes** - Qtd de minutos a ser considerado.
 
 **request**  
 ```
-GET /map/561ffd80497f0c09812d3180/route?origin=Barretos&destination=Viradouro&autonomy=10&gas=3.45
+GET /plan/5626ab22bb3900c615dc38f2/query?origin=011&destination=016&minutes=80
 ```  
 **output**
 ```json
 {
-  "path": [
-    "Barretos",
-    "Jaborandi",
-    "Terra Roxa",
-    "Viradouro"
-  ],
-  "cost": 19.665
+  "origin": "011",
+  "destination": "016",
+  "minutes": 80,
+  "plan": "FaleMais 30",
+  "planCost": "104.50",
+  "noPlanCost": "152.00"
 }
 ```
 
-### POST /map
-**Overview**: POST /map will create a new map in the database.   
-**Parameters**: All parameters are required.
-- **name** - A name for this new map.
-- **roads** - Roads is an Array of the roads available in the map including the distance between two points.  
-    * **origin** - A name of a start point.
-    * **destination** - A name of a end point.
-    * **cost** - The distance between this two points.
+### POST /plan
+**Overview**: POST /plan Criará um novo plano no banco de dados.   
+**Parameters**: Todos os parâmetros são obrigatórios.
+- **name** - O nome para o novo plano.
+- **pack** - Informações disponíveis do pacote do plano.  
+    * **cost** - Valor do plano.
+    * **minutes** - Minutos disponíveis no pacote.
+    * **extra** - Valor em porcentagem(%) a ser cobrado por minutos excedentes.
 
 **request**  
 ```
-POST /map { "name": "Barretos", "roads": [ {"origin": "Barretos", "destination": "Jaborandi", "cost": 10} ] } 
+POST /plan { "name": "FaleMais 30", "pack": {"extra": 10, "minutes": 30, "cost": 30} } 
 ```
 **output**
 ```json
 {
-  "_id": "561dc3c1e2f5436f6e6e4981",
-  "name": "SP",
-  "__v": 0,
-  "roads": [
-    {
-      "origin": "A",
-      "destination": "B",
-      "cost": 10,
-      "_id": "561dc3c1e2f5436f6e6e4982"
-    }
-  ]
+	_id: "5629678b4ef023e8292881e0",
+	name: "FaleMais 30",
+	__v: 0,
+	pack: {
+		cost: 30,
+		extra: 10,
+		minutes: 30
+	}
 }
 ```
 
-### PUT /map/{id}
-**Overview**: PUT /map will update a specified map in the database.   
+### PUT /plan/{id}
+**Overview**: PUT /plan Atualizará um plano no banco de dados.  
 **Parameters**: 
-- **id** - The id of the document for update. (*Query string param*)
-- **name** - A name for this new map.
-- **roads** - Roads is an Array of the roads available in the map including the distance between two points.  
-    * **origin** - A name of a start point.
-    * **destination** - A name of a end point.
-    * **cost** - The distance between this two points.
+- **id** - Id do documento a ser editado. (*Query string*)
+- **name** - O nome para o novo plano.
+- **pack** - Informações disponíveis do pacote do plano.  
+    * **cost** - Valor do plano.
+    * **minutes** - Minutos disponíveis no pacote.
+    * **extra** - Valor em porcentagem(%) a ser cobrado por minutos excedentes.
 
 **request**  
 ```
-PUT /map/561dc3c1e2f5436f6e6e4981 { "name": "Barretos" } 
+PUT /plan/5629678b4ef023e8292881e0 { "name": "Fale Mais 30" } 
 ```
 **output**
 ```json
 {
-  "_id": "561dc3c1e2f5436f6e6e4981",
-  "name": "Barretos",
-  "__v": 0,
-  "roads": [
-    {
-      "origin": "A",
-      "destination": "B",
-      "cost": 10,
-      "_id": "561dc3c1e2f5436f6e6e4982"
-    }
-  ]
+	_id: "5629678b4ef023e8292881e0",
+	name: "Fale Mais 30",
+	__v: 0,
+	pack: {
+		cost: 30,
+		extra: 10,
+		minutes: 30
+	}
 }
 ```
 
-### DELETE /map/{id}
-**Overview**: DELETE /map will delete a specified map in the database.   
-**Parameters**: All parameters are required.
-- **id** - The id of the document for update. (*Query string param*)
+### DELETE /plan/{id}
+**Overview**: DELETE /plan Deleta um plano do banco de dados.   
+**Parameters**: Todos os parâmetros são obrigatórios.
+- **id** - Id do plano a ser deletado. (*Query string*)
 - 
 **request**  
 ```
-POST /map/fadfgadgfadsgdfgsdfgs { "name": "Barretos" } 
+DELETE /plan/5629678b4ef023e8292881e0
 ```
 **output**
 ```json
 
 ````
 
-## Best route 
-Well, to fit the best route, I use the Dijkstra Algorithm, because this algorithm can help us to resolve this question. 
-When we get the map and transform it in a Graph, we can calculate the best path for the start point to the goal. After find the path, we have the cost of this path, Dijkstra will get ever the best fit, so we need to calculate the cost based in the autonomy and the price of gas.  
-**formula**: (`cost` * `gas`) / `autonomy`  
-`cost` is the value returned by Dijkstra algorithm.
+### GET /prices
+**Overview**: GET /prices retornará todas os preços  
+**request**
+```
+GET /prices
+```
+**output**
+```json
+[
+  {
+    "_id": "5629678b4ef023e8292881e3",
+    "origin": "011",
+    "__v": 0,
+    "destinations": [
+      {
+        "cost": 1.9,
+        "destination": "016",
+        "_id": "5629678b4ef023e8292881e6"
+      },
+      {
+        "cost": 1.7,
+        "destination": "017",
+        "_id": "5629678b4ef023e8292881e5"
+      },
+      {
+        "cost": 0.9,
+        "destination": "018",
+        "_id": "5629678b4ef023e8292881e4"
+      }
+    ]
+  }
+]
+```
 
-### Others Approches
-To solve this problem we can fit the search in width or depth common used in the AI to solve problems.
+### GET /price/{id}
+**Overview**: GET /price/{id} retornará o preço especificado. 
+**Parameters**:
+- **id** - Precisa ser um ObjectID - Id é obrigatório.
+
+**request**  
+```
+GET /price/5629678b4ef023e8292881e7
+```
+**output**
+```json
+{
+  "_id": "5629678b4ef023e8292881e7",
+  "origin": "016",
+  "__v": 0,
+  "destinations": [
+    {
+      "destination": "011",
+      "cost": 2.9,
+      "_id": "5629678b4ef023e8292881e8"
+    }
+  ]
+}
+```
+
+### POST /price
+**Overview**: POST /price Criará um novo preço para ligações entre origem e destinos no banco de dados.   
+**Parameters**: Todos os parâmetros são obrigatórios.
+- **origin** - Origem das ligações.
+- **destinations** - Array com os destinos possíveis e seus preços.  
+    * **destination** - Destinatário.
+    * **cost** - Valor do minuto de ligação para o destinatário.
+
+**request**  
+```
+POST /price { "origin": "011", "destinations": [{"destination": "016", "cost": 1.9}] } 
+```
+**output**
+```json
+{
+  "_id": "5629678b4ef023e829288117",
+  "origin": "011",
+  "__v": 0,
+  "destinations": [
+    {
+      "destination": "016",
+      "cost": 1.9,
+      "_id": "5629678b4ef023e8292881s8"
+    }
+  ]
+}
+```
+
+### PUT /price/{id}
+**Overview**: PUT /price Atualizará um preço no banco de dados.  
+**Parameters**: 
+- **id** - Id do documento a ser editado. (*Query string*)
+- **origin** - Origem das ligações.
+- **destinations** - Array com os destinos possíveis e seus preços.  
+    * **destination** - Destinatário.
+    * **cost** - Valor do minuto de ligação para o destinatário.
+
+**request**  
+```
+PUT /price/5629678b4ef023e829288117 { "origin": "SP" } 
+```
+**output**
+```json
+{
+  "_id": "5629678b4ef023e829288117",
+  "origin": "SP",
+  "__v": 0,
+  "destinations": [
+    {
+      "destination": "016",
+      "cost": 1.9,
+      "_id": "5629678b4ef023e8292881s8"
+    }
+  ]
+}
+```
+
+### DELETE /price/{id}
+**Overview**: DELETE /price Deleta um preço do banco de dados.   
+**Parameters**: Todos os parâmetros são obrigatórios.
+- **id** - Id do plano a ser deletado. (*Query string*)
+- 
+**request**  
+```
+DELETE /price/5629678b4ef023e829288117
+```
+**output**
+```json
+
+````
 
 ## Run this Project
 To run this project you need have installed 

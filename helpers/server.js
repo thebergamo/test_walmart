@@ -30,13 +30,13 @@ server.register(Inert, () => {});
 
 // static file
 server.route({
-    method: 'GET',
-    path: '/{param*}',
-    handler: {
-        directory: {
-            path: Path.join(__dirname, '..', 'public')
-        }
+  method: 'GET',
+  path: '/{param*}',
+  handler: {
+    directory: {
+      path: Path.join(__dirname, '..', 'public')
     }
+  }
 });
 
 // load routes

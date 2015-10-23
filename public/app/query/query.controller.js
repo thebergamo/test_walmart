@@ -1,11 +1,12 @@
-(function() {
+/* global angular */
+(function () {
   'use strict';
 
   angular
     .module('app.query', ['app.query.service'])
     .controller('QueryController', QueryController);
 
-  function QueryController(QueryService) {
+  function QueryController (QueryService) {
     var vm = this;
     vm.greeting = 'Just a simple test';
     vm.plan = null;
@@ -23,26 +24,21 @@
     vm.doQuery = doQuery;
     vm.close = close;
 
-
     function loadPlans () {
-      QueryService.get('plans').then(function(response){
+      QueryService.get('plans').then((response) => {
         vm.plans = response;
       });
     }
-
     function loadLocations () {
-      QueryService.get('prices').then(function(response){
+      QueryService.get('prices').then((response) => {
         vm.locations = response;
         vm.destinations = [];
         vm.destination = null;
       });
-    
     }
-
     function loadDestinations () {
       vm.destinations = vm.location.destinations;
     }
-
     function doQuery () {
       let options = {
         plan: vm.plan._id,
@@ -51,15 +47,13 @@
         minutes: vm.minutes
       };
       QueryService.query(options)
-        .then(function(response) {
+        .then((response) => {
           vm.result = response;
         });
     }
-
     function close () {
       vm.result = undefined;
     }
   }
-
 })();
 

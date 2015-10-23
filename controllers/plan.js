@@ -155,12 +155,11 @@ function calculateCost (options) {
   if (options.minutes > pack.minutes) {
     let increase = options.destinationInfo.cost * (pack.extra / 100);
     let planCost = (options.minutes - pack.minutes) * (options.destinationInfo.cost + increase);
-    ret['planCost'] = planCost.toFixed(2);
+    ret['planCost'] = planCost;
   }
   // calculate the cost without a plan
-  let noPlanCost =  options.minutes * options.destinationInfo.cost;
-  ret['noPlanCost'] = noPlanCost.toFixed(2);
-  
+  let noPlanCost = options.minutes * options.destinationInfo.cost;
+  ret['noPlanCost'] = noPlanCost;
 
   return ret;
 }

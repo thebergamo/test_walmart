@@ -1,3 +1,4 @@
+/* global angular */
 (function () {
   'use strict';
 
@@ -6,5 +7,4 @@
     .constant('API', {
       URL: 'http://localhost:8000'
     });
-
 })();

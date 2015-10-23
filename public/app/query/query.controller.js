@@ -8,7 +8,7 @@
 
   function QueryController (QueryService) {
     var vm = this;
-    vm.greeting = 'Just a simple test';
+    vm.greeting = 'Bem vindo à scupTel';
     vm.plan = null;
     vm.plans = [];
     vm.location = null;
